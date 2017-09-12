@@ -12,9 +12,7 @@ function swap_display(){
 
 $(document).keyup(function(e) {
     if (e.keyCode === 27) { // escape key maps to keycode `27`
-        $('.carousel-item').removeClass('active d-flex align-items-center h100');
-        $('.hide-on-slideshow').show();
-        $('.hide-on-mosaic').hide();
+        swap_display();
     }
 });
 
@@ -51,4 +49,58 @@ $('#carouselExampleIndicators').on('slid.bs.carousel', function () { // FIXME gr
     $('.carousel-item.active').addClass('active d-flex align-items-center h100');
 });
 
+
+/* Swipe for touchscreens. */
+$(".carousel").on("touchstart", function(event){
+    const xClick = event.originalEvent.touches[0].pageX;
+    $(this).one("touchmove", function(event){
+        const sensitivity = Math.floor(xClick - event.originalEvent.touches[0].pageX);
+        if( sensitivity > 5 ){
+            $(".carousel").carousel('next');
+        } else if( sensitivity < -5 ){
+            $(".carousel").carousel('prev');
+        }
+    });
+    $(".carousel").on("touchend", function(){
+        $(this).off("touchmove");
+    });
+});
+
 $('.close-float').click(swap_display);
+
+/* Drag'n'drop*/
+function cancel(e) {
+    if (e.preventDefault) e.preventDefault(); // required by FF + Safari
+    e.dataTransfer.dropEffect = 'copy'; // tells the browser what drop effect is allowed here
+    return false; // required by IE
+}
+
+document.querySelectorAll('.drop').forEach(function(elem){
+    elem.addEventListener('dragover', cancel);
+    elem.addEventListener('dragenter', cancel);
+    elem.addEventListener('drop', function (e) {
+        if (e.preventDefault)
+            e.preventDefault(); // stops the browser from redirecting off to the text.
+
+        const from = e.dataTransfer.getData('text');
+        const to = elem.id + '/' + from.split('/').pop();
+        $.ajax({
+            method: "POST",
+            url: "./index.php",
+            data: {move_from: from, move_to: to}
+        }).done(function( msg ) {
+            $("div[id='col_" + from + "']").remove();
+        });
+        return false;
+    });
+});
+
+document.querySelectorAll('.draggable').forEach(function(elem){
+    elem.addEventListener('dragstart', function(ev){
+        ev.dataTransfer.setData('text', ev.target.alt);
+    });
+});
+
+
+// https://html5demos.com/drag-anything/#view-source
+

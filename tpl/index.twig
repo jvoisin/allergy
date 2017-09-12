@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel='stylesheet' type='text/css' href='./static/css/bootstrap.min.css'>
     <link rel='stylesheet' type='text/css' href='./static/css/style.css'>
-    <title>Simphel</title>
+    <title>Allergy</title>
 </head>
 <body>
 
@@ -31,8 +31,8 @@
     <div class="container hide-on-slideshow" id="mosaic">
         <div class="row">
             {% for d in dir_and_files['folders'] %}
-                <div class="col col-5 col-sm-4 col-md-3 col-lg-2 align-items-stretch">
-                    <div class="card">
+                <div class="col col-5 col-sm-4 col-md-3 col-lg-2 align-items-stretch" draggable="true">
+                    <div class="card drop" id="{{ d }}">
                         <div class="card-body text-center folder-card clic-card">
                             <a class="align-middle btn btn-outline-primary d-flex"
                                href="/?p={{ current }}{{ d }}"> {{ d | split('/') | last }}
@@ -42,7 +42,7 @@
                 </div>
             {% endfor %}
             {% for d in dir_and_files['files'] %}
-                <div class="col col-5 col-sm-4 col-md-3 col-lg-2 align-items-stretch">
+                <div class="col col-5 col-sm-4 col-md-3 col-lg-2 align-items-stretch draggable" id =col_{{ d }} draggable="true">
                     <div class="card">
                         <img src="{{ d }}" class="card-img-top img-fluid carousel-image" alt="{{ d }}">
                     </div>
@@ -71,10 +71,9 @@
     <div class="carousel-inner">
         {% for d in dir_and_files['files'] %}
             <div class="carousel-item">
-                    <img src="{{ d }}" alt="image" class="d-block img-fluid ml-auto mr-auto">
+                <img src="{{ d }}" alt="{{ d }}" class="d-block img-fluid ml-auto mr-auto">
             </div>
         {% endfor %}
-        <!-- https://getbootstrap.com/docs/4.0/components/carousel/#events -->
         <div class="carousel-caption">
             <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with button groups">
                 <a class="btn-secondary btn" href="#carouselExampleIndicators" data-slide="prev">prev</a>
