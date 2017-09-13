@@ -1,5 +1,12 @@
 <?php
 
+function get_safe_path($path, $prefix) {
+    if (isset($path) && strpos($path, '..') === FALSE && strpos($path, $prefix) === 0) {
+        return $_GET['p'];
+    }
+    return $prefix;
+}
+
 function get_uploaded_files_array($files) {
     $new = array();
     foreach( $files as $key => $all ){

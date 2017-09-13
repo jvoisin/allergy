@@ -5,17 +5,20 @@ require "lib/utils.php";
 $loader = new Twig_Loader_Filesystem('./tpl');
 $twig = new Twig_Environment($loader, array());
 
-$dir = './data';
-if (isset($_GET['p']) && strpos($_GET['p'], '..') === FALSE && strpos($_GET['p'], $dir) === 0) {
-    $dir = $_GET['p'];
-}
+$dir = get_safe_path($_GET['p'], './data');
 
 if (isset($_POST['move_from']) && isset($_POST['move_to'])) {
-    rename($_POST['move_from'], $_POST['move_to']); // FIXME path traversal
+    $from = get_safe_path($_POST['move_from'], './data');
+    $to = get_safe_path($_POST['move_to'], './data');
 }
 
 if (isset($_POST['del'])) {
-    unlink($_POST['del']); //FIXME
+    $path = get_safe_path($_GET['p'], './data');
+    if ($path != './data') {
+        if (is_file($path)) {
+            unlink($_POST['del']);
+        }
+    }
 }
 
 if (isset($_POST['folder_name'])) {
