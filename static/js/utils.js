@@ -36,10 +36,14 @@ $(".clic-card").click(function() {
 });
 
 $(".new-folder").click(function(){
-   var $name = prompt("Nom du nouveau dossier ?");
-   if($name) {
-       $.post('./index.php', {'folder_name': $name}, function (response) {
-            location.reload();  // FIXME ajax
+   const name = prompt("Nom du nouveau dossier ?");
+   if (name) {
+       $.ajax({
+           method: "POST",
+           url: $('.terminal-crumb')[0].href,
+           data: {folder_name: name}
+       }).done(function( msg ) {
+           location.reload();
        });
    }
 });

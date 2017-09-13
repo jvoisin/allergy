@@ -16,7 +16,7 @@
             {% for d in dir_and_files['current'] | split('/') %}
                 {% set path = path ~ '/' ~ d %}
                 <li class="breadcrumb-item">
-                    <a class="{% if loop.last %}font-weight-bold{% endif %}" href="/?p={{ path[1:] }}">{{ d }}</a>
+                    <a class="{% if loop.last %}font-weight-bold terminal-crumb{% endif %}" href="/?p={{ path[1:] }}">{{ d }}</a>
                 </li>
             {% endfor %}
         </ol>
