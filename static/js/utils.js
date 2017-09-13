@@ -17,12 +17,13 @@ $(document).keyup(function(e) {
 });
 
 $(document).keydown(function(e) {
+    const carousel = $('.carousel');
     switch(e.keyCode) {
         case 37:
-            $('.carousel').carousel('prev');
+            carousel.carousel('prev');
             break;
         case 39:
-            $('.carousel').carousel('next');
+            carousel.carousel('next');
             break;
         default:
             break;
@@ -49,24 +50,28 @@ $('#carouselExampleIndicators').on('slid.bs.carousel', function () { // FIXME gr
     $('.carousel-item.active').addClass('active d-flex align-items-center h100');
 });
 
+$('.close-float').click(swap_display);
+
 
 /* Swipe for touchscreens. */
 $(".carousel").on("touchstart", function(event){
     const xClick = event.originalEvent.touches[0].pageX;
+    const yClick = event.originalEvent.touches[0].pageY;
     $(this).one("touchmove", function(event){
-        const sensitivity = Math.floor(xClick - event.originalEvent.touches[0].pageX);
-        if( sensitivity > 5 ){
+        const sensitivity_x = Math.floor(xClick - event.originalEvent.touches[0].pageX);
+        const sensitivity_y = Math.floor(yClick - event.originalEvent.touches[0].pageY);
+        if( sensitivity_x > 5 ){
             $(".carousel").carousel('next');
-        } else if( sensitivity < -5 ){
+        } else if( sensitivity_x < -5 ){
             $(".carousel").carousel('prev');
+        } else if (sensitivity_y < -5) {
+            swap_display();
         }
     });
-    $(".carousel").on("touchend", function(){
-        $(this).off("touchmove");
-    });
+    $(".carousel").on("touchend", function(){$(this).off("touchmove");});
 });
 
-$('.close-float').click(swap_display);
+
 
 /* Drag'n'drop*/
 function cancel(e) {
@@ -75,7 +80,7 @@ function cancel(e) {
     return false; // required by IE
 }
 
-document.querySelectorAll('.drop').forEach(function(elem){
+document.querySelectorAll('.drop').forEach(function(elem) {
     elem.addEventListener('dragover', cancel);
     elem.addEventListener('dragenter', cancel);
     elem.addEventListener('drop', function (e) {
@@ -95,12 +100,40 @@ document.querySelectorAll('.drop').forEach(function(elem){
     });
 });
 
+document.querySelectorAll('.draggable').forEach(function(elem) {
+    elem.addEventListener('drag', function(){
+        $('.drop-delete').removeClass('btn-outline-success').addClass('btn-danger').html("Supprimer");
+    });
+    elem.addEventListener('dragend', function(){
+        $('.drop-delete').removeClass('btn-danger').addClass('btn-outline-success').html("Ajouter");
+    });
+});
+
+document.querySelectorAll('.drop-delete').forEach(function(elem) {
+    elem.addEventListener('dragover', cancel);
+    elem.addEventListener('dragenter', cancel);
+    elem.addEventListener('drop', function (e) {
+        if (e.preventDefault)
+            e.preventDefault(); // stops the browser from redirecting off to the text.
+
+        const file = e.dataTransfer.getData('text');
+        if (true === confirm("Supprimer le fichier " + file + ' ?')){
+            $.ajax({
+                method: "POST",
+                url: "./index.php",
+                data: {del: file}
+            }).done(function( msg ) {
+                $("div[id='col_" + file + "']").remove();
+            });
+        }
+
+        return false;
+    });
+});
+
+
 document.querySelectorAll('.draggable').forEach(function(elem){
     elem.addEventListener('dragstart', function(ev){
         ev.dataTransfer.setData('text', ev.target.alt);
     });
 });
-
-
-// https://html5demos.com/drag-anything/#view-source
-

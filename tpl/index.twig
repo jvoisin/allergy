@@ -23,7 +23,7 @@
         <form id="fileupload" method="post" enctype="multipart/form-data" class="imageupload form-inline">
             <input type="hidden" name="MAX_FILE_SIZE" value="300000000" />
             <input type="file" name="images[]" id="image" class="inputfile  mr-sm-2" onchange="this.form.submit()" multiple/>
-            <label for="image" class="btn btn-outline-success">Envoyer</label>
+            <label for="image" class="btn btn-outline-success drop-delete">Ajouter</label>
             <button type="submit" class="text-hide" >Envoyer</button>
         </form>
     </nav>
@@ -63,11 +63,6 @@
 </nav>
 
 <div id="carouselExampleIndicators" class="carousel hide-on-mosaic" data-interval="false" data-ride="carousel">
-    <div class="close-float">
-        <button type="button" class="close icon-white btn" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
     <div class="carousel-inner">
         {% for d in dir_and_files['files'] %}
             <div class="carousel-item">
@@ -76,9 +71,9 @@
         {% endfor %}
         <div class="carousel-caption">
             <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with button groups">
-                <a class="btn-secondary btn" href="#carouselExampleIndicators" data-slide="prev">prev</a>
-                <a class="btn-success btn" id='download_btn' href="{{ d }}" download="{{ d | split('/') | last }}">download</a>
-                <a class="btn-secondary btn" href="#carouselExampleIndicators" data-slide="next">next</a>
+                <a class="btn-outline-light btn-secondary btn arrow" href="#carouselExampleIndicators" data-slide="prev">↞ prev</a>
+                <a class="btn-outline-success btn" id='download_btn' href="{{ d }}" download="{{ d | split('/') | last }}">↡ download</a>
+                <a class="btn-outline-light btn-secondary btn arrow" href="#carouselExampleIndicators" data-slide="next">next ↠</a>
             </div>
         </div>
     </div>

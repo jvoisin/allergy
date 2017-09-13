@@ -12,7 +12,10 @@ if (isset($_GET['p']) && strpos($_GET['p'], '..') === FALSE && strpos($_GET['p']
 
 if (isset($_POST['move_from']) && isset($_POST['move_to'])) {
     rename($_POST['move_from'], $_POST['move_to']); // FIXME path traversal
-    echo '1337';
+}
+
+if (isset($_POST['del'])) {
+    unlink($_POST['del']); //FIXME
 }
 
 if (isset($_POST['folder_name'])) {
