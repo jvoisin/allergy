@@ -9,6 +9,8 @@ $dir = get_safe_path($_GET['p'], './data');
 if (isset($_POST['move_from']) && isset($_POST['move_to'])) {
     $from = get_safe_path($_POST['move_from'], './data');
     $to = get_safe_path($_POST['move_to'], './data');
+    $from = preg_replace('[^0-9a-z _/]', '_', $from);
+    $to = preg_replace('[^0-9a-z _/]', '_', $to);
     rename($from, $to);
 } elseif (isset($_POST['del'])) {
     $path = get_safe_path($_POST['del'], './data');
@@ -16,11 +18,11 @@ if (isset($_POST['move_from']) && isset($_POST['move_to'])) {
         unlink($path);
     }
 } elseif (isset($_POST['folder_name'])) {
-    $name = preg_replace('[^0-9a-z _()]', '_', $_POST['folder_name']);
+    $name = preg_replace('[^0-9a-z _]', '_', $_POST['folder_name']);
     mkdir($dir . DIRECTORY_SEPARATOR . $name);
 } elseif (isset($_FILES['images'])) {
     foreach (get_uploaded_files_array($_FILES['images']) as $image) {
-        handle_upload($image, $dir);
+        handle_upload($image, $_GET['p']);
     }
 }
 

@@ -29,8 +29,8 @@ $(document).keydown(function(e) {
             break;
     }
 });
- // onclick on cards
-$(".clic-card").click(function() {
+
+$(".clic-card").click(function() { // onclick on cards
     window.location = $(this).find("a").attr("href");
     return false;
 });

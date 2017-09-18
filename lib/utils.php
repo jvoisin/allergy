@@ -36,18 +36,15 @@ function get_dir_and_files(string $dir): array {
 	return $ret;
 }
 
-function handle_upload(array $image, string $dir) {
+function handle_upload(array $image, string $dir): bool {
     switch( $image['error'] ) {
         case UPLOAD_ERR_OK:
-            $path = get_safe_path($dir . '/' . $image['name'], './data');
-            if ($path === $dir . '/' . $image['name']) {
-                if (move_uploaded_file($image['tmp_name'], $dir . '/' . $image['name'])) {
-                } else {
-                    var_dump($image);
-                    echo "\n";
-                }
+            $path = get_safe_path($dir, './data') . '/' . preg_replace('[^0-9a-z ._]', '_', $image['name']);
+            if (false === move_uploaded_file($image['tmp_name'], $path)) {
+                var_dump($image);
+                echo "\n";
             }
-            break;
+            return true;
         case UPLOAD_ERR_INI_SIZE:
         case UPLOAD_ERR_FORM_SIZE:
             die('file too large');
