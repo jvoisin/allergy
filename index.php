@@ -11,7 +11,7 @@ if (isset($_POST['move_from']) && isset($_POST['move_to'])) {
     $to = get_safe_path($_POST['move_to'], './data');
     rename($from, $to);
 } elseif (isset($_POST['del'])) {
-    $path = get_safe_path($_GET['del'], './data');
+    $path = get_safe_path($_POST['del'], './data');
     if ($path != './data' && is_file($path)) {
         unlink($path);
     }

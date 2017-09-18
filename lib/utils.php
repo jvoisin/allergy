@@ -1,13 +1,13 @@
 <?php
 
-function get_safe_path($path, $prefix) {
+function get_safe_path(string $path=NULL, string $prefix): string {
     if (isset($path) && strpos($path, '..') === FALSE && strpos($path, $prefix) === 0) {
         return $path;
     }
     return $prefix;
 }
 
-function get_uploaded_files_array($files) {
+function get_uploaded_files_array(array $files): array {
     $new = array();
     foreach( $files as $key => $all ){
         foreach( $all as $i => $val ){
@@ -17,7 +17,7 @@ function get_uploaded_files_array($files) {
     return $new;
 }
 
-function get_dir_and_files($dir){
+function get_dir_and_files(string $dir): array {
 	$ret = array('folders' => array(), 'files'=> array());
 	$ret['current'] = $dir;
 	$cdir = scandir($dir);
@@ -36,7 +36,7 @@ function get_dir_and_files($dir){
 	return $ret;
 }
 
-function handle_upload($image, $dir) {
+function handle_upload(array $image, string $dir) {
     switch( $image['error'] ) {
         case UPLOAD_ERR_OK:
             $path = get_safe_path($dir . '/' . $image['name'], './data');
