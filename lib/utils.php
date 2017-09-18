@@ -35,3 +35,27 @@ function get_dir_and_files($dir){
 	}
 	return $ret;
 }
+
+function handle_upload($image, $dir) {
+    switch( $image['error'] ) {
+        case UPLOAD_ERR_OK:
+            $path = get_safe_path($dir . '/' . $image['name'], './data');
+            if ($path === $dir . '/' . $image['name']) {
+                if (move_uploaded_file($image['tmp_name'], $dir . '/' . $image['name'])) {
+                } else {
+                    var_dump($image);
+                    echo "\n";
+                }
+            }
+            break;
+        case UPLOAD_ERR_INI_SIZE:
+        case UPLOAD_ERR_FORM_SIZE:
+            die('file too large');
+        case UPLOAD_ERR_PARTIAL:
+            die(' - file upload was not completed.');
+        case UPLOAD_ERR_NO_FILE:
+            die(' - zero-length file uploaded.');
+        default:
+            die(' - internal error #'.$image['error']);
+    }
+}
