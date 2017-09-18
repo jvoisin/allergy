@@ -135,7 +135,6 @@ document.querySelectorAll('.drop-delete').forEach(function(elem) {
     });
 });
 
-
 document.querySelectorAll('.draggable').forEach(function(elem){
     elem.addEventListener('dragstart', function(ev){
         ev.dataTransfer.setData('text', ev.target.alt);
